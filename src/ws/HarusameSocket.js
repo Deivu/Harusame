@@ -8,7 +8,12 @@ class HarusameSocketEvents {
         this.ws = null;
         this.heartbeat = null;
         this.harusame.emit('close', this.name, `Close Code: ${code}. Reason: ${reason || 'None'}`);
-        setTimeout(this.start.bind(this), this.harusame.config.interval);
+
+        if (code !== 1000) 
+            return setTimeout(this.start.bind(this), this.harusame.config.interval);
+        
+        this.attempts = 0;
+        this.harusame.emit('disconnect', this.name, 'Socket Disconnected with close code 1000. Please reconnect manually');
     }
 
     static error(error) {
@@ -22,10 +27,9 @@ class HarusameSocketEvents {
         this.harusame.emit('open', this.name);
     }
 
-    static message(raw) {
-        let msg;
+    static message(msg) {
         try {
-            msg = JSON.parse(raw);
+            msg = JSON.parse(msg);
         } catch (error) {
             return HarusameSocketEvents.error.bind(this, error);
         }
@@ -47,12 +51,12 @@ class HarusameSocketEvents {
                     songAlbum: d.song.albums && d.song.albums.length > 0 ? d.song.albums[0].name : 'None',
                     songCover: d.song.albums && d.song.albums.length > 0 && d.song.albums[0].image ? `https://cdn.listen.moe/covers/${d.song.albums[0].image}` : 'https://listen.moe/public/images/icons/apple-touch-icon.png',
                     listeners: d.listeners || 0
-                }
+                };
                 this.harusame.emit('songUpdate', this.name, this.data);
                 break;
             }
             case 10:
-                this.harusame.emit('debug', this.name, 'Heartbeat acknowledged.')
+                this.harusame.emit('debug', this.name, 'Heartbeat acknowledged.');
 
         }
     }
@@ -71,7 +75,7 @@ class HarusameSocket {
             songAlbum: 'None',
             songCover: 'https://listen.moe/public/images/icons/apple-touch-icon.png',
             listeners: 0
-        }
+        };
 
         this.attempts = 0;
         this.ws = null;
@@ -111,7 +115,7 @@ class HarusameSocket {
                 return reject(error);
             }
             this.ws.send(payload, error => error ? reject(error) : resolve());
-        })
+        });
     }
 
     _setHeartbeat(length) {

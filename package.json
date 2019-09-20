@@ -6,5 +6,8 @@
 	"repository": "https://github.com/Deivu/Harusame",
 	"dependencies": {
 		"ws": "^7.1.2"
+	},
+	"devDependencies": {
+		"typescript": "^3.5.2"
 	}
 }

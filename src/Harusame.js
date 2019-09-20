@@ -27,7 +27,7 @@ class Harusame extends EventEmitter {
         return {
             JPOP: this.ws.JPOP.data,
             KPOP: this.ws.KPOP.data
-        }
+        };
     }
 
     connect(socket) {
