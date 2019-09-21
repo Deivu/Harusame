@@ -4,3 +4,5 @@
 </p>
 
 The ShipGirl Project. Harusame `(c) Kancolle for Harusame`
+
+> Still undocumented and is on its early stages.
