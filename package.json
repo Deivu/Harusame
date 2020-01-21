@@ -1,13 +1,13 @@
 {
 	"name": "harusame",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"author": "Deivu (Saya)",
 	"license": "MIT",
 	"repository": "https://github.com/Deivu/Harusame",
 	"dependencies": {
-		"ws": "^7.1.2"
+		"ws": "^7.2.1"
 	},
 	"devDependencies": {
-		"typescript": "^3.5.2"
+		"typescript": "^3.7.5"
 	}
 }

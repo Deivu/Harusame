@@ -1,5 +1,6 @@
 const { EventEmitter } = require('events');
 const HarusameSocket = require('./ws/HarusameSocket');
+const Gateways = require('./ws/HarusameGateways');
 
 class Harusame extends EventEmitter {
     constructor(config = {}) {
@@ -9,37 +10,29 @@ class Harusame extends EventEmitter {
             attempts: config.attempts || 3,
             interval: config.interval || 5000
         };
-        this.ws = {
-            JPOP: new HarusameSocket(
-                this,
-                'Listen.moe JPOP',
-                'wss://listen.moe/gateway_v2'
-            ),
-            KPOP: new HarusameSocket(
-                this,
-                'Listen.moe KPOP',
-                'wss://listen.moe/kpop/gateway_v2'
-            )
-        };
+
+        this.ws = new Map();
+        for (const { name, key, link } of Gateways) this.ws.set(key, new HarusameSocket(this, name, link));
     }
 
     get song() {
-        return {
-            JPOP: this.ws.JPOP.data,
-            KPOP: this.ws.KPOP.data
-        };
+        const data = {};
+        for (const [key, socket] of this.ws) data[key] = socket.data;
+        return data;
     }
 
-    connect(socket) {
-        if (!this.ws[socket])
-            throw new Error('Socket parameter must be only JPOP or KPOP');
-        this.ws[socket].start();
+    connect(key) {
+        const socket = this.ws.get(key);
+        if (!socket)
+            throw new Error('The key parameter must be only JPOP or KPOP. Case Sensitive');
+        socket.start();
     }
 
-    destroy(socket) {
-        if (!this.ws[socket])
-            throw new Error('Socket parameter must be only JPOP or KPOP');
-        this.ws[socket].destroy();
+    destroy(key) {
+        const socket = this.ws.get(key);
+        if (!socket)
+            throw new Error('The key parameter must be only JPOP or KPOP. Case Sensitive');
+        socket.destroy();
     }
 }
 
