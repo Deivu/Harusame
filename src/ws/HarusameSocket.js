@@ -43,7 +43,9 @@ class HarusameSocketEvents {
             }
             case 1: {
                 if (msg.t !== 'TRACK_UPDATE' && msg.t !== 'TRACK_UPDATE_REQUEST' && msg.t !== 'QUEUE_UPDATE' && msg.t !== 'NOTIFICATION') break;
+                if (msg.d) return;
                 const { d } = msg;
+                if (!d.song) return;
                 this.data = {
                     songName: d.song.title ? d.song.title : 'None',
                     songArtist: d.song.artists.length ? d.song.artists.map(a => a.nameRomaji || a.name).join(', ') : 'None',
