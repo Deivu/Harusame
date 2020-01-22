@@ -1,0 +1,11 @@
+node_modules
+docs
+tests
+.idea
+.gitignore
+.eslintrc.yml
+.eslintrc.yml
+.docma.json
+package-lock.json
+README.md
+CHANGELOGS.MD
