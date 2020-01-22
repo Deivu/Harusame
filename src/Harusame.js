@@ -11,7 +11,7 @@ class Harusame extends EventEmitter {
             interval: config.interval || 5000
         };
 
-        this.ws = new Map();
+        Object.defineProperty(this, 'ws', { value: new Map() });
         for (const { name, key, link } of Gateways) this.ws.set(key, new HarusameSocket(this, name, link));
     }
 

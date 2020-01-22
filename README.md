@@ -5,15 +5,75 @@
 
 The ShipGirl Project. Harusame `(c) Kancolle for Harusame`
 
-## Installation
+### Installation
 Master
 ```
 npm i Deivu/Harusame
 ```
 Stable
 ```
-Soon
+npm i Harusame
 ```
 
-## Example
-Check [Client.js](https://github.com/Deivu/Harusame/blob/master/tests/Client.js)
+### Examples
+For invoked type code example, check [Client-Invoked.js](https://github.com/Deivu/Harusame/blob/master/tests/Client-Invoked.js)
+
+For event driven code example, check [Client-Event.js](https://github.com/Deivu/Harusame/blob/master/tests/Client-Event.js)
+
+### Documentation
+```js
+// Default Options
+const { Harusame } = require('harusame');
+new Harusame({ attempts: 3, interval: 5000 });
+```
+> Harusame Client Options
+| Name             | Description
+|------            |------
+|`options.attempts`| Specifies how much Harusame will retry to connect to LISTEN.moe ws before you manually reconnect. Defaults to 3.
+|`options.interval`| Specifies the interval between reconnects. Defaults to 5000 ms.
+
+> Harusame Events
+```js
+const client = new Harusame()
+  .on('debug', (name, msg) => console.log(`Websocket Name: ${name}, Debug Message: ${msg}`))
+  .on('error', (name, error) => console.error(`Websocket Name: ${name}`, error))
+  .on('close', (name, reason) => console.log(`Websocket Name: ${name}, Close Data: ${reason}`))
+  .on('open', (name) => console.log(`Websocket Name: ${name} is now open.`))
+  .on('ready', (name) => console.log(`Websocket Name: ${name} is now ready`))
+  .on('songUpdate', (name, data) => console.log(`Websocket Name: ${name}, Song:`, data));
+```
+| Name       | Description
+|------      |------
+|`debug`     | Emitted when a debug message is fired.
+|`error`     | Emitted when an error was thrown when handling something. **must be handled**
+|`close`     | Emitted when a websocket connection closed.
+|`open`      | Emitted when a websocket connection is opened.
+|`ready`     | Emitted when a websocket connection is ready.
+|`songUpdate`| Emitted when a new track is playing at LISTEN.moe.
+
+> Harusame Properties & Methods
+```js
+const client = new Harusame()
+  .on('error', (name, error) => console.error(`Websocket Name: ${name}`, error));
+
+console.log(client.config);
+console.log(client.song);
+
+// Connect or Destroy JPOP LISTEN.moe WS
+client.connect('JPOP'); 
+client.destroy('JPOP');
+
+// Connect or Destroy KPOP LISTEN.moe WS
+client.connect('KPOP'); 
+client.destroy('KPOP');
+```
+
+- Properties
+
+`client.config` => returns the config you have set to Harusame.
+`client.song` => returns an object with two keys, which is **JPOP** and **KPOP**.
+
+- Methods
+
+`client.connect()` => connects the WS you want.
+`client.destroy()` => destroys the WS you want.

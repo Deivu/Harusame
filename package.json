@@ -6,7 +6,8 @@
 	"repository": "https://github.com/Deivu/Harusame",
 	"main": "index.js",
 	"scripts": {
-		"test": "node ./tests/Client.js"
+		"test-event": "node ./tests/Client-Event.js",
+		"test-invoked": "node ./tests/Client-Invoked.js"
 	},
 	"dependencies": {
 		"ws": "^7.2.1"
