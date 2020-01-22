@@ -5,4 +5,15 @@
 
 The ShipGirl Project. Harusame `(c) Kancolle for Harusame`
 
-> Still undocumented and is on its early stages.
+## Installation
+Master
+```
+npm i Deivu/Harusame
+```
+Stable
+```
+Soon
+```
+
+## Example
+Check [Client.js](https://github.com/Deivu/Harusame/blob/master/tests/Client.js)
