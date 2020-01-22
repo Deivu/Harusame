@@ -21,12 +21,13 @@ For invoked type code example, check [Client-Invoked.js](https://github.com/Deiv
 For event driven code example, check [Client-Event.js](https://github.com/Deivu/Harusame/blob/master/tests/Client-Event.js)
 
 ### Documentation
+
+> Harusame Client Options
 ```js
 // Default Options
 const { Harusame } = require('harusame');
 new Harusame({ attempts: 3, interval: 5000 });
 ```
-> Harusame Client Options
 | Name             | Description
 |------            |------
 |`options.attempts`| Specifies how much Harusame will retry to connect to LISTEN.moe ws before you manually reconnect. Defaults to 3.
@@ -71,9 +72,11 @@ client.destroy('KPOP');
 - Properties
 
 `client.config` => returns the config you have set to Harusame.
+
 `client.song` => returns an object with two keys, which is **JPOP** and **KPOP**.
 
 - Methods
 
 `client.connect()` => connects the WS you want.
+
 `client.destroy()` => destroys the WS you want.
