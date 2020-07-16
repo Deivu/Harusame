@@ -36,12 +36,12 @@ new Harusame({ attempts: 3, interval: 5000 });
 > Harusame Events
 ```js
 const client = new Harusame()
-  .on('debug', (name, msg) => console.log(`Websocket Name: ${name}, Debug Message: ${msg}`))
-  .on('error', (name, error) => console.error(`Websocket Name: ${name}`, error))
-  .on('close', (name, reason) => console.log(`Websocket Name: ${name}, Close Data: ${reason}`))
-  .on('open', (name) => console.log(`Websocket Name: ${name} is now open.`))
-  .on('ready', (name) => console.log(`Websocket Name: ${name} is now ready`))
-  .on('songUpdate', (name, data) => console.log(`Websocket Name: ${name}, Song:`, data));
+  .on('debug', (name, msg) => console.log(`${name}, Debug Message: ${msg}`))
+  .on('error', (name, error) => console.error(`${name}, error`, error))
+  .on('close', (name, reason) => console.log(`${name}, Close Data: ${reason}`))
+  .on('open', (name) => console.log(`${name} is now open.`))
+  .on('ready', (name) => console.log(`${name} is now ready`))
+  .on('songUpdate', (name, data) => console.log(`${name}, Song:`, data));
 ```
 | Name       | Description
 |------      |------
@@ -55,25 +55,25 @@ const client = new Harusame()
 > Harusame Properties & Methods
 ```js
 const client = new Harusame()
-  .on('error', (name, error) => console.error(`Websocket Name: ${name}`, error));
+  .on('error', (name, error) => console.error(`${name}, error:`, error));
 
 console.log(client.config);
 console.log(client.song);
 
 // Connect or Destroy JPOP LISTEN.moe WS
-client.connect('JPOP'); 
-client.destroy('JPOP');
+client.connect('JP'); 
+client.destroy('JP');
 
 // Connect or Destroy KPOP LISTEN.moe WS
-client.connect('KPOP'); 
-client.destroy('KPOP');
+client.connect('KR'); 
+client.destroy('KR');
 ```
 
 - Properties
 
 `client.config` => returns the config you have set to Harusame.
 
-`client.song` => returns an object with two keys, which is **JPOP** and **KPOP**.
+`client.song` => returns an object with two keys, which is **JP** and **KR**.
 
 - Methods
 
