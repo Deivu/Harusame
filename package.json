@@ -1,6 +1,6 @@
 {
 	"name": "harusame",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"description": "A Node.js wrapper around LISTEN.moe websocket api.",
 	"author": "Deivu (Saya)",
 	"license": "MIT",
@@ -15,11 +15,11 @@
 		"listenmoe",
 		"listen.moe",
 		"weeb-library"
-	  ],
+	],
 	"dependencies": {
-		"ws": "^7.2.1"
+		"ws": "^7.3.1"
 	},
 	"devDependencies": {
-		"typescript": "^3.7.5"
+		"typescript": "^3.9.6"
 	}
 }
