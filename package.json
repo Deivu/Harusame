@@ -1,6 +1,6 @@
 {
 	"name": "harusame",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "A Node.js wrapper around LISTEN.moe websocket api.",
 	"author": "Deivu (Saya)",
 	"license": "MIT",
