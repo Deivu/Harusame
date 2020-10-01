@@ -1,10 +1,9 @@
 class HarusameSocketEvents {
     static close(code, reason) {
-        clearInterval(this.heartbeat);
+        this._heartbeat(-1);
         this.ws.removeAllListeners();
         this.ws.close(code);
         this.ws = null;
-        this.heartbeat = null;
         this.harusame.emit('close', this.name, `Close Code: ${code}. Reason: ${reason || 'None'}`);
 
         if (code !== 1000) 
@@ -20,8 +19,7 @@ class HarusameSocketEvents {
     }
 
     static open() {
-        clearInterval(this.heartbeat);
-        this.heartbeat = null;
+        this._heartbeat(-1);
         this.harusame.emit('open', this.name);
     }
 
@@ -35,7 +33,7 @@ class HarusameSocketEvents {
             switch (msg.op) {
                 case 0: {
                     this.attempts = 0;
-                    this._setHeartbeat(msg.d.heartbeat);
+                    this._heartbeat(msg.d.heartbeat);
                     this.harusame.emit('debug', this.name, `Set to heartbeat every ${msg.d.heartbeat} ms`);
                     this.harusame.emit('ready', this.name);
                     break;

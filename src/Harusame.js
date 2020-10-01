@@ -22,16 +22,16 @@ class Harusame extends EventEmitter {
     }
 
     connect(key) {
-        const socket = this.ws.get(key);
+        const socket = this.ws.get(key.toUpperCase());
         if (!socket)
-            throw new Error('The key parameter must be only JP or KR. Case Sensitive');
+            throw new Error('The key parameter must be only JP or KR.');
         socket.start();
     }
 
     destroy(key) {
-        const socket = this.ws.get(key);
+        const socket = this.ws.get(key.toUpperCase());
         if (!socket)
-            throw new Error('The key parameter must be only JP or KR. Case Sensitive');
+            throw new Error('The key parameter must be only JP or KR.');
         socket.destroy();
     }
 }
