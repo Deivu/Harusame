@@ -17,7 +17,7 @@ class HarusameSocket {
 
         this.attempts = 0;
         this.ws = null;
-        this.heartbeatInterval = null;
+        this._heartbeatInterval = null;
 
         this.start();
     }
@@ -60,12 +60,12 @@ class HarusameSocket {
         // duration provided
         if (!isNaN(duration)) {
             // check if heartbeatInterval is non-null before continuing
-            if (this.heartbeatInterval) {
-                clearInterval(this.heartbeatInterval);
-                this.heartbeatInterval = null;
+            if (this._heartbeatInterval) {
+                clearInterval(this._heartbeatInterval);
+                this._heartbeatInterval = null;
             }
             if (duration !== 1) {
-                this.heartbeatInterval = setInterval(this._heartbeat.bind(this), duration);
+                this._heartbeatInterval = setInterval(this._heartbeat.bind(this), duration);
             }
         }
         // duration not provided, send heartbeat instead
