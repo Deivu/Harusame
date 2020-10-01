@@ -17,7 +17,7 @@ class HarusameSocket {
 
         this.attempts = 0;
         this.ws = null;
-        this.heartbeat = null;
+        this.heartbeatInterval = null;
 
         this.start();
     }
@@ -56,16 +56,24 @@ class HarusameSocket {
         });
     }
 
-    _setHeartbeat(length) {
-        clearInterval(this.heartbeat);
-        this.heartbeat = null;
-        this.heartbeat = setInterval(this._sendHeartbeat.bind(this), length);
-    }
-
-    _sendHeartbeat() {
-        this.send({ op: 9 })
-            .then(() => this.harusame.emit('debug', this.name, 'Sent a heartbeat.'))
-            .catch(HarusameSocketEvents.error.bind(this));
+    _heartbeat(duration) {
+        // duration provided
+        if (!isNaN(duration)) {
+            // check if heartbeatInterval is non-null before continuing
+            if (this.heartbeatInterval) {
+                clearInterval(this.heartbeatInterval);
+                this.heartbeatInterval = null;
+            }
+            if (duration !== 1) {
+                this.heartbeatInterval = setInterval(this._heartbeat.bind(this), duration);
+            }
+        }
+        // duration not provided, send heartbeat instead
+        else {
+            this.send({ op: 9 })
+                .then(() => this.harusame.emit('debug', this.name, 'Sent a heartbeat.'))
+                .catch(HarusameSocketEvents.error.bind(this));
+        }
     }
 }
 
