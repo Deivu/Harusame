@@ -1,25 +1,26 @@
 {
-	"name": "harusame",
-	"version": "1.1.1",
-	"description": "A Node.js wrapper around LISTEN.moe websocket api.",
-	"author": "Deivu (Saya)",
-	"license": "MIT",
-	"repository": "https://github.com/Deivu/Harusame",
-	"main": "index.js",
-	"scripts": {
-		"test-event": "node ./tests/Client-Event.js",
-		"test-invoked": "node ./tests/Client-Invoked.js"
-	},
-	"keywords": [
-		"music",
-		"listenmoe",
-		"listen.moe",
-		"weeb-library"
-	],
-	"dependencies": {
-		"ws": "^7.3.1"
-	},
-	"devDependencies": {
-		"typescript": "^3.9.6"
-	}
+  "name": "harusame",
+  "version": "1.1.1",
+  "description": "A Node.js wrapper around LISTEN.moe websocket api.",
+  "author": "Deivu (Saya)",
+  "license": "MIT",
+  "repository": "https://github.com/Deivu/Harusame",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test-event": "node ./tests/Client-Event.js",
+    "test-invoked": "node ./tests/Client-Invoked.js"
+  },
+  "keywords": [
+    "music",
+    "listenmoe",
+    "listen.moe",
+    "weeb-library"
+  ],
+  "dependencies": {
+    "ws": "^7.3.1"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.6"
+  }
 }
