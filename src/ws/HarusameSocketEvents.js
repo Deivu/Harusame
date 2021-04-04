@@ -1,8 +1,10 @@
 class HarusameSocketEvents {
     static close(code, reason) {
         this._heartbeat(-1);
-        this.ws.removeAllListeners();
-        this.ws.close(code);
+        if (this.ws) {
+            this.ws.removeAllListeners();
+            this.ws.close(code);
+        }
         this.ws = null;
         this.harusame.emit('close', this.name, `Close Code: ${code}. Reason: ${reason || 'None'}`);
 
@@ -15,6 +17,7 @@ class HarusameSocketEvents {
 
     static error(error) {
         this.harusame.emit('error', this.name, error);
+        if (!this.ws || !error || !error.message) return;
         this.ws.close(1011, error.message);
     }
 
