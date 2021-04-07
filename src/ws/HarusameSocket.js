@@ -45,7 +45,7 @@ class HarusameSocket {
 
     send(data) {
         return new Promise((resolve, reject) => {
-            if (!this.ws) return reject(new Error('No websocket available.'));
+            if (!this.ws) return resolve();
             let payload;
             try {
                 payload = JSON.stringify(data);

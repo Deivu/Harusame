@@ -6,10 +6,10 @@ class HarusameSocketEvents {
             this.ws.close(code);
         }
         this.ws = null;
-        this.harusame.emit('close', this.name, `Close Code: ${code}. Reason: ${reason || 'None'}`);
 
-        if (code !== 1000) 
-            return setTimeout(this.start.bind(this), this.harusame.config.interval);
+        this.harusame.emit('close', this.name, code, reason);
+
+        if (code !== 1000) return setTimeout(this.start.bind(this), this.harusame.config.interval);
         
         this.attempts = 0;
         this.harusame.emit('disconnect', this.name, 'Socket Disconnected with close code 1000. Please reconnect manually');
@@ -17,8 +17,8 @@ class HarusameSocketEvents {
 
     static error(error) {
         this.harusame.emit('error', this.name, error);
-        if (!this.ws || !error || !error.message) return;
-        this.ws.close(1011, error.message);
+        if (!this.ws) return;
+        this.ws.close(1011);
     }
 
     static open() {
@@ -26,13 +26,9 @@ class HarusameSocketEvents {
         this.harusame.emit('open', this.name);
     }
 
-    static message(msg) {
+    static message(string) {
         try {
-            msg = JSON.parse(msg);
-        } catch (error) {
-            return this.harusame.emit('error', this.name, error);
-        }
-        try {
+            const msg = JSON.parse(string);
             switch (msg.op) {
                 case 0: {
                     this.attempts = 0;
