@@ -1,11 +1,10 @@
 const Websocket = require('ws');
-const HarusameSocketEvents = require('./HarusameSocketEvents');
+const { close, error, open, message } = require('./Events');
 class HarusameSocket {
-    constructor(Harusame, WebsocketName, WebsocketURL) {
-        this.harusame = Harusame;
-        this.name = WebsocketName;
-        this.url = WebsocketURL;
-
+    constructor(harusame, name, url) {
+        this.harusame = harusame;
+        this.name = name;
+        this.url = url;
         this.data = {
             songName: 'None',
             songArtist: 'None',
@@ -14,11 +13,9 @@ class HarusameSocket {
             songCover: 'https://listen.moe/public/images/icons/apple-touch-icon.png',
             listeners: 0
         };
-
         this.attempts = 0;
         this.ws = null;
-        this._heartbeatInterval = null;
-
+        this.heartbeatInterval = null;
         this.start();
     }
 
@@ -28,31 +25,23 @@ class HarusameSocket {
             this.attempts = 0;
             return;
         }
-
         if (this.ws) return;
-
         this.ws = new Websocket(this.url);
-        this.ws.on('close', HarusameSocketEvents.close.bind(this));
-        this.ws.on('error', HarusameSocketEvents.error.bind(this));
-        this.ws.on('open', HarusameSocketEvents.open.bind(this));
-        this.ws.on('message',  HarusameSocketEvents.message.bind(this));
+        this.ws.on('close', close.bind(this));
+        this.ws.on('error', error.bind(this));
+        this.ws.on('open', open.bind(this));
+        this.ws.on('message', message.bind(this));
     }
 
     destroy() {
-        if (!this.ws) return;
+        if (!this.ws || this.ws.readyState !== Websocket.OPEN) return close.bind(this)(1000);
         this.ws.close(1000);
     }
 
     send(data) {
-        return new Promise((resolve, reject) => {
-            if (!this.ws) return resolve();
-            let payload;
-            try {
-                payload = JSON.stringify(data);
-            } catch (error) {
-                return reject(error);
-            }
-            this.ws.send(payload, error => error ? reject(error) : resolve());
+        if (!this.ws || this.ws.readyState !== Websocket.OPEN) return;
+        this.ws.send(JSON.stringify(data), error => {
+            if (error) this.harusame.emit('error', this.name, error);
         });
     }
 
@@ -60,19 +49,18 @@ class HarusameSocket {
         // duration provided
         if (!isNaN(duration)) {
             // check if heartbeatInterval is non-null before continuing
-            if (this._heartbeatInterval) {
-                clearInterval(this._heartbeatInterval);
-                this._heartbeatInterval = null;
+            if (this.heartbeatInterval) {
+                clearInterval(this.heartbeatInterval);
+                this.heartbeatInterval = null;
             }
-            if (duration !== 1) {
-                this._heartbeatInterval = setInterval(this._heartbeat.bind(this), duration);
+            if (duration >= 0) {
+                this.heartbeatInterval = setInterval(this._heartbeat.bind(this), duration);
             }
         }
         // duration not provided, send heartbeat instead
         else {
-            this.send({ op: 9 })
-                .then(() => this.harusame.emit('debug', this.name, 'Sent a heartbeat.'))
-                .catch(HarusameSocketEvents.error.bind(this));
+            this.send({ op: 9 });
+            this.harusame.emit('debug', this.name, 'Sent a heartbeat.');
         }
     }
 }

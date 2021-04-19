@@ -1,26 +1,23 @@
-class HarusameSocketEvents {
+const Websocket = require('ws');
+
+class Events {
     static close(code, reason) {
         this._heartbeat(-1);
-        if (this.ws) {
-            this.ws.removeAllListeners();
-            this.ws.close(code);
-        }
+        this.ws?.removeAllListeners();
+        if (this.ws?.readyState === Websocket.OPEN) this.ws.close(code);
         this.ws = null;
-
         this.harusame.emit('close', this.name, code, reason);
-
         if (code !== 1000) return setTimeout(this.start.bind(this), this.harusame.config.interval);
-        
         this.attempts = 0;
-        this.harusame.emit('disconnect', this.name, 'Socket Disconnected with close code 1000. Please reconnect manually');
+        this.harusame.emit('disconnect', this.name, 'Socket disconnected with close code 1000, please reconnect manually');
     }
 
     static error(error) {
         this.harusame.emit('error', this.name, error);
-        if (!this.ws) return;
-        this.ws.close(1011);
+        if (!this.ws) return Events.close.bind(this)(1011, 'Websocket errored');
+        if (this.ws.readyState === Websocket.OPEN) this.ws.close(1011);
     }
-
+    
     static open() {
         this._heartbeat(-1);
         this.harusame.emit('open', this.name);
@@ -63,4 +60,4 @@ class HarusameSocketEvents {
     }
 }
 
-module.exports = HarusameSocketEvents;
+module.exports = Events;

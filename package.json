@@ -11,6 +11,9 @@
     "test-event": "node ./tests/Client-Event.js",
     "test-invoked": "node ./tests/Client-Invoked.js"
   },
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "keywords": [
     "music",
     "listenmoe",
@@ -18,7 +21,7 @@
     "weeb-library"
   ],
   "dependencies": {
-    "ws": "^7.4.4"
+    "ws": "^7.4.5"
   },
   "devDependencies": {
     "typescript": "^4.2.3"
