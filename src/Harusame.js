@@ -1,5 +1,5 @@
 const { EventEmitter } = require('events');
-const HarusameSocket = require('./ws/HarusameSocket');
+const Socket = require('./ws/Socket');
 const Gateways = require('./ws/Gateways');
 
 class Harusame extends EventEmitter {
@@ -10,7 +10,7 @@ class Harusame extends EventEmitter {
             interval: config.interval || 5000
         };
         this.ws = new Map();
-        for (const { name, key, link } of Gateways) this.ws.set(key, new HarusameSocket(this, name, link));
+        for (const { name, key, link } of Gateways) this.ws.set(key, new Socket(this, name, link));
     }
 
     get song() {

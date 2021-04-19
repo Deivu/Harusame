@@ -1,6 +1,7 @@
 const Websocket = require('ws');
 const { close, error, open, message } = require('./Events');
-class HarusameSocket {
+
+class Socket {
     constructor(harusame, name, url) {
         this.harusame = harusame;
         this.name = name;
@@ -65,4 +66,4 @@ class HarusameSocket {
     }
 }
 
-module.exports = HarusameSocket;
+module.exports = Socket;
