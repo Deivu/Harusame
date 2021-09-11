@@ -6,6 +6,5 @@ tests
 .eslintrc.yml
 .eslintrc.yml
 .docma.json
-package-lock.json
 README.md
 CHANGELOGS.MD
