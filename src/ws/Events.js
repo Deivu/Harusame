@@ -40,11 +40,13 @@ class Events {
                     const { d } = msg;
                     if (!d.song) break;
                     this.data = {
+                        songId: d.song.id || 0,
                         songName: d.song.title ? d.song.title : 'None',
                         songArtist: d.song.artists.length ? d.song.artists.map(a => a.nameRomaji || a.name).join(', ') : 'None',
                         songRequest: d.requester ? d.requester.displayName : 'None',
                         songAlbum: d.song.albums && d.song.albums.length > 0 ? d.song.albums[0].name : 'None',
                         songCover: d.song.albums && d.song.albums.length > 0 && d.song.albums[0].image ? `https://cdn.listen.moe/covers/${d.song.albums[0].image}` : 'https://listen.moe/images/share.jpg',
+                        songDuration: d.song.duration || 0,
                         listeners: d.listeners || 0
                     };
                     this.harusame.emit('songUpdate', this.name, this.data);
