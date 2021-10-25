@@ -26,6 +26,8 @@ class Events {
     static message(string) {
         try {
             const msg = JSON.parse(string);
+            const defaultImage = 'https://listen.moe/images/share.jpg';
+
             switch (msg.op) {
                 case 0: {
                     this.attempts = 0;
@@ -40,14 +42,13 @@ class Events {
                     const { d } = msg;
                     if (!d.song) break;
                     this.data = {
-                        songId: d.song.id || 0,
-                        songName: d.song.title ? d.song.title : 'None',
-                        songArtist: d.song.artists.length ? d.song.artists.map(a => a.nameRomaji || a.name).join(', ') : 'None',
-                        songArtistId: d.song.artists.length > 0 ? d.song.artists[0].id || 0 : 0,
-                        songRequest: d.requester ? d.requester.displayName : 'None',
-                        songAlbum: d.song.albums && d.song.albums.length > 0 ? d.song.albums[0].name : 'None',
-                        songCover: d.song.albums && d.song.albums.length > 0 && d.song.albums[0].image ? `https://cdn.listen.moe/covers/${d.song.albums[0].image}` : 'https://listen.moe/images/share.jpg',
-                        songDuration: d.song.duration || 0,
+                        id: d.song.id || 0,
+                        name: d.song.title || 'none',
+                        artists: d.song.artists ? d.song.artists.map((a) => ({ ...a, image: a.image ? `https://cdn.listen.moe/artist/${a.image}` : defaultImage })) : [],
+                        requester: d.requester ? d.requester.displayName : 'none',
+                        albums: d.song.albums ? d.song.albums.map((a) => ({ ...a, image: a.image ? `https://cdn.listen.moe/albums/${a.image}` : defaultImage })) : [],
+                        cover: d.song.albums && d.song.albums.length > 0 && d.song.albums[0].image ? `https://cdn.listen.moe/covers/${d.song.albums[0].image}` : defaultImage,
+                        duration: d.song.duration || 0,
                         listeners: d.listeners || 0
                     };
                     this.harusame.emit('songUpdate', this.name, this.data);

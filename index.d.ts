@@ -1,12 +1,28 @@
 import EventEmitter from "events";
 export { version } from './package.json';
 
-interface SongUpdateData {
-  songName: string;
-  songArtist: string;
-  songRequest: string;
-  songAlbum: string;
-  songCover: string;
+export interface SongUpdateArtistData {
+  id: number;
+  name: string;
+  nameRomaji: string;
+  image: string;
+}
+
+export interface SongUpdateAlbumData {
+  id: number;
+  name: string;
+  nameRomaji: string;
+  image: string;
+}
+
+export interface SongUpdateData {
+  id: number;
+  name: string;
+  artists: SongUpdateArtistData[];
+  requester: string;
+  albums: SongUpdateAlbumData[];
+  cover: string;
+  duration: number;
   listeners: number;
 }
 
